@@ -12,11 +12,28 @@ const char* ssid = "ROBOTECH";
 const char* password = "vaeG7nmt";
 String clientIP = "";
 
-// Hardware settings
+// Hardware variables
 const int ledPin = 2;
 int state;
 float speed;
 
+// UART variables
+uint8_t modbus_str_start_frame[] = { 0x0A, 0x01, 0x06, 0x02 };
+uint8_t modbus_str_end_frame[] = { 0x0D, 0x0A };
+uint8_t modbus_str_speed_frame[] = {0x00, 0x00, 0x00, 0x00};
+unsigned long time_delay = 100;
+
+
+void send_to_stm32_modbus_frame(float *tmp_speed_float) {
+	// IEEE 754 convert float -> uint32_t -> uint8_t buffer
+	uint32_t tmp_speed_uint32_t = (uint32_t)*tmp_speed_float;
+	modbus_str_speed_frame[0] = ((uint8_t)((tmp_speed_uint32_t >> 24)&0xFF));
+	modbus_str_speed_frame[1] = ((uint8_t)((tmp_speed_uint32_t >> 16)&0xFF));
+	modbus_str_speed_frame[2] = ((uint8_t)((tmp_speed_uint32_t >> 8)&0xFF));
+	modbus_str_speed_frame[3] = ((uint8_t)(tmp_speed_uint32_t&0xFF));
+
+	// 
+}
 
 bool isOperator = false;
 String processor(const String& var){
@@ -102,4 +119,10 @@ void setup() {
   server.begin();
 }
 
-void loop() {}
+void loop() {
+	if(clientIP != "" && isOperator)
+	{
+		send_to_stm32_modbus_frame(&speed);
+	}
+
+}
