@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wifi robot management with ESP32</title>
+  <meta name="viewport" content="width=device-width, initialscale=1">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+  <h1>WiFi robot management interface from ESP32</h1>
+  <p allign="center"><img src="rcr"></p>
+  <div style="clear: both;">
+    <p><button class="button" onclick="changeState(1)">FORWARD</button></p>
+    <p><button class="button" onclick="changeState(2)">LEFT</button>
+    <button class="button button2" onclick="changeState(0)">STOP</button>
+    <button class="button" onclick="changeState(3)">RIGHT</button></p></div>
+    <p><button class="button" onclick="changeState(4)">REVERSE</button></p>
+    <p>Motor Speed: <span id="motorSpeed"></span></p>
+    <input type="range" min="0" max="255" step="3" id="motorSlider" onchange="motorSpeed(this.value)" value=valueString>
+    %SWITCH%
+    <script>$.ajaxSetup({timeout:1000})
+    function getControlled(element) { 
+      if(element.checked) {$.post("/update?operator=1")}
+      else {$.post("/update?operator=0")}
+      {Connection: closse};
+    }
+    function changeState(state) { $.post("/update?state=" + state); {Connection: close};}
+    var slider = document.getElementById("motorSlider");
+    var motorP = document.getElementById("motorSpeed"); motorP.innerHTML = (slider.value / 255 * 3.33).toFixed(2);
+    slider.oninput = function() { slider.value = this.value; motorP.innerHTML = (this.value / 255 * 3.33).toFixed(2); }
+    function motorSpeed(pos) { $.post("/update?value=" + (pos / 255 * 3.33).toFixed(2) + "&"); {Connection: close};}</script>
+</body>
+</html>
