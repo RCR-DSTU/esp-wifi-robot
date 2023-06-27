@@ -1,6 +1,9 @@
 #include <Arduino.h>
 #include <HardwareSerial.h>
 #include <ESPAsyncWebServer.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 #include "SPIFFS.h"
 
 /*
@@ -8,16 +11,19 @@
 	1 - Low information
 	2 - Full information
 */
-#define DEBUG_LEVEL		1
+#define DEBUG_LEVEL		0
 
 // objects
+Adafruit_SSD1306 display(128, 64, &Wire, -1);
 AsyncWebServer server(80);
 HardwareSerial SerialPort(2);
 
 // Wifi settings
-const char* ssid = "TP-Link_2а/5";
-const char* password = "58674910_SaS";
+const char* ssid = "ROBOTECH";
+const char* password = "vaeG7nmt";
 String clientIP = "";
+String serverIP = "NONE";
+String state = "disconnected!";
 
 // Hardware variables
 const int ledPin = 2;
@@ -91,6 +97,16 @@ static char CRCLo[] = {
 0x43, 0x83, 0x41, 0x81, 0x80, 0x40
 };
 
+void visualise_state_on_display(void)
+{
+	display.clearDisplay();
+	display.setCursor(0, 10);
+	display.print("IP:");
+	display.print(WiFi.localIP());
+	display.setCursor(0, 20);
+	display.print("State:" + state);
+	display.display();
+}
 
 void calc_crc16(unsigned char *puchmsg, unsigned short usDataLen) {
 	// low high crc bytes initialized
@@ -149,13 +165,15 @@ void send_to_stm32_modbus_frame(float tmp_speed_float, uint8_t state) {
 	}
 	Serial.print("\r\n");
 #endif
-	if(SerialPort.available())
+	uint32_t time = 0xFF;
+	while(SerialPort.available())
 	{
+		if(--time == 0) break; 
+	}
 #if (DEBUG_LEVEL >= 1)
 		Serial.print("[LOOP] Send message \r\n");
-		SerialPort.write(modbus_str_start_frame, sizeof(modbus_str_start_frame));
 #endif
-	}
+	SerialPort.write(modbus_str_start_frame, sizeof(modbus_str_start_frame));
 }
 
 bool isOperator = false;
@@ -186,26 +204,27 @@ void setup() {
 	// Serial connection
 	pinMode(ledPin, OUTPUT);
 	Serial.begin(115200);
-	SerialPort.begin(115200, SERIAL_8N1, 16, 17);
-
 	SPIFFS.begin(true);
 
+	if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) Serial.println("SSD1306 allocation failed");
+	display.setTextSize(1);
+	display.setTextColor(WHITE);
+
+	SerialPort.begin(115200, SERIAL_8N1, 16, 17);
 	// Wifi connection
 	WiFi.mode(WIFI_STA);
 	WiFi.begin(ssid, password);
-#if (DEBUG_LEVEL >= 1)
 	Serial.print("[CORE] Connecting to WiFi..");
-#endif
 	while(WiFi.status() != WL_CONNECTED)
 	{
 		delay(500);
 		Serial.print(".");
 	}
-#if (DEBUG_LEVEL >= 1)
+
 	Serial.println("\r\n[CORE] WiFi connected!");
 	Serial.println(WiFi.localIP());
-#endif
 
+	visualise_state_on_display();
    server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
 		if(String(request->client()->remoteIP()) == clientIP || clientIP == "") isOperator = true;
 		else isOperator = false;
@@ -233,12 +252,18 @@ void setup() {
 			Serial.print("[SERVER] Disconnected from operator with IP: "); 
 			speed = 1.00;
 			direction = 0;
-			Serial.println(request->client()->remoteIP()); }
+			Serial.println(request->client()->remoteIP()); 
+			state = "disconnected!";
+			visualise_state_on_display();
+			}
 		else { 
 			clientIP += request->client()->remoteIP();
 			Serial.print("[SERVER] Connected control from operator with IP: ");
 			Serial.println(request->client()->remoteIP()); 
-			digitalWrite(ledPin, HIGH); }
+			digitalWrite(ledPin, HIGH); 
+			state = "connected!";
+			visualise_state_on_display();
+			}
 	}
 
 	if(String(request->client()->remoteIP()) == clientIP) {
@@ -267,7 +292,6 @@ void setup() {
 			rotate_angle = pos_angle.toInt();
 			}
 		}
-
 	}
   });
   // deploy server
@@ -276,7 +300,7 @@ void setup() {
 
 void loop() {
 	unsigned long tmp = millis();
-	if(clientIP != "" && isOperator)
+	if(clientIP != "")
 	{
 		if(tmp - prev_time >= time_period)
 		{
@@ -287,5 +311,5 @@ void loop() {
 			send_to_stm32_modbus_frame(speed, direction);
 		}
 	} else prev_time = tmp; 
-	delay(500);
+	delay(250);
 }
