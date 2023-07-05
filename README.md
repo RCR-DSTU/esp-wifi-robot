@@ -4,6 +4,10 @@
 <img width=60% src = https://github.com/RCR-DSTU/esp_wifi_robot/blob/main/images/robot.jpg>
 </p></h3>
 
+<h3><p align="center"> 
+<img width=80% src = https://github.com/RCR-DSTU/esp_wifi_robot/blob/main/images/robot_end.jpg>
+</p></h3>
+
 <h3><p align="left">[Аннотация]:</p></h3>
 <h4><p align="left">Проект был создан студентами, обучающимися в Ресурсном центре робототехники
 ДГТУ для управления мобильным гусеничным роботом с помощью средств беспроводного управления. 
