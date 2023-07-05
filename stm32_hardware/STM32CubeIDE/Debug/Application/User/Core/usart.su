@@ -1,0 +1,4 @@
+C:/Users/Caska/Documents/PlatformIO/Projects/esp_wifi_robot/stm32_hardware/Core/Src/usart.c:34:6:MX_USART1_UART_Init	8	static
+C:/Users/Caska/Documents/PlatformIO/Projects/esp_wifi_robot/stm32_hardware/Core/Src/usart.c:63:6:MX_USART3_UART_Init	8	static
+C:/Users/Caska/Documents/PlatformIO/Projects/esp_wifi_robot/stm32_hardware/Core/Src/usart.c:91:6:HAL_UART_MspInit	56	static
+C:/Users/Caska/Documents/PlatformIO/Projects/esp_wifi_robot/stm32_hardware/Core/Src/usart.c:182:6:HAL_UART_MspDeInit	16	static

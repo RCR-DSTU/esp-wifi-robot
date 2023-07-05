@@ -1,0 +1,3 @@
+C:/Users/Caska/Documents/PlatformIO/Projects/esp_wifi_robot/stm32_hardware/Core/Src/stm32f4xx_hal_timebase_tim.c:41:19:HAL_InitTick	56	static
+C:/Users/Caska/Documents/PlatformIO/Projects/esp_wifi_robot/stm32_hardware/Core/Src/stm32f4xx_hal_timebase_tim.c:94:6:HAL_SuspendTick	4	static
+C:/Users/Caska/Documents/PlatformIO/Projects/esp_wifi_robot/stm32_hardware/Core/Src/stm32f4xx_hal_timebase_tim.c:106:6:HAL_ResumeTick	4	static

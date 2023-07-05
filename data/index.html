@@ -29,12 +29,12 @@
     }
     function changeState(state) { $.post("/update?state=" + state); {Connection: close};}
     var slider = document.getElementById("motorSlider");
-    var motorP = document.getElementById("motorSpeed"); motorP.innerHTML = (slider.value / 255 * 3.33).toFixed(2);
+    var motorP = document.getElementById("motorSpeed"); motorP.innerHTML = (slider.value / 255 * 0.25).toFixed(2);
     var pos = document.getElementById("rotarySlider");
     var posP = document.getElementById("rotaryPos"); posP.innerHTML = (pos.value / 1024 * 180).toFixed(0);
-    slider.oninput = function() { slider.value = this.value; motorP.innerHTML = (this.value / 255 * 3.33).toFixed(2); }
+    slider.oninput = function() { slider.value = this.value; motorP.innerHTML = (this.value / 255 * 0.25).toFixed(2); }
     pos.oninput = function() { pos.value = this.value; posP.innerHTML = (this.value / 1024 * 180).toFixed(0); }
-    function motorSpeed(pos) { $.post("/update?speed=" + (pos / 255 * 3.33).toFixed(2) + "&"); {Connection: close};}
+    function motorSpeed(pos) { $.post("/update?speed=" + (pos / 255 * 0.25).toFixed(2) + "&"); {Connection: close};}
     function rotaryPos(pos) {$.post("/update?pos=" + (pos / 1024 * 180).toFixed(2) + "&"); {Connection: close};}</script>
 </body>
 </html>

@@ -1,0 +1,5 @@
+C:/Users/Caska/Documents/PlatformIO/Projects/esp_wifi_robot/stm32_hardware/Core/Src/freertos.c:148:13:reset_options	8	static
+C:/Users/Caska/Documents/PlatformIO/Projects/esp_wifi_robot/stm32_hardware/Core/Src/freertos.c:167:13:check_modbus_crc	24	static
+C:/Users/Caska/Documents/PlatformIO/Projects/esp_wifi_robot/stm32_hardware/Core/Src/freertos.c:194:6:MX_FREERTOS_Init	8	static
+C:/Users/Caska/Documents/PlatformIO/Projects/esp_wifi_robot/stm32_hardware/Core/Src/freertos.c:239:6:StartDefaultTask	16	static
+C:/Users/Caska/Documents/PlatformIO/Projects/esp_wifi_robot/stm32_hardware/Core/Src/freertos.c:299:6:ModBus_Task	32	static

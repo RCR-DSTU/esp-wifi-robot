@@ -11,7 +11,7 @@
 	1 - Low information
 	2 - Full information
 */
-#define DEBUG_LEVEL		0
+#define DEBUG_LEVEL		1
 
 // objects
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
